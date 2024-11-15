@@ -5,31 +5,31 @@ import type {
   ObjectPathName,
   ObjectPathType,
   PathSplit,
-  ZodEnvConfig,
+  ZodotenvConfig,
 } from './types';
 
-export class ZodEnvError extends Error {
+export class ZodotenvError extends Error {
   constructor(message: string, cause?: Error) {
     super(message);
-    this.name = 'ZodEnvError';
+    this.name = 'ZodotenvError';
     this.cause = cause;
   }
 }
 
-const walk = (map: Map<string, unknown>, entry: ZodEnvConfig | EnvWithZodType, prefix = '') => {
+const walk = (map: Map<string, unknown>, entry: ZodotenvConfig | EnvWithZodType, prefix = '') => {
   if (Array.isArray(entry)) {
     const [envName, schema] = entry;
 
     assert(
       typeof envName === 'string' && envName.length > 0,
-      new ZodEnvError(`Missing environment variable name for "${prefix}"`),
+      new ZodotenvError(`Missing environment variable name for "${prefix}"`),
     );
-    assert(schema instanceof ZodType, new ZodEnvError('The provided schema is not a Zod type'));
+    assert(schema instanceof ZodType, new ZodotenvError('The provided schema is not a Zod type'));
 
     const { data, error } = schema.safeParse(process.env[envName]);
 
     if (error) {
-      throw new ZodEnvError(
+      throw new ZodotenvError(
         `Configuration does not match the provided schema for "${prefix}": ${error.message}`,
         error,
       );
@@ -44,10 +44,10 @@ const walk = (map: Map<string, unknown>, entry: ZodEnvConfig | EnvWithZodType, p
   }
 };
 
-export const zodenv = <T extends ZodEnvConfig>(config: T) => {
+export const zodotenv = <T extends ZodotenvConfig>(config: T) => {
   assert(
     typeof config === 'object',
-    new ZodEnvError('The configuration must be defined as an object'),
+    new ZodotenvError('The configuration must be defined as an object'),
   );
 
   const map = new Map<string, unknown>();

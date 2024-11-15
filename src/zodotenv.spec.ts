@@ -1,14 +1,14 @@
 import assert from 'node:assert/strict';
 import { afterEach, describe, it } from 'node:test';
 import z from 'zod';
-import type { ZodEnvConfig } from './types';
-import { zodenv } from './zodenv';
+import type { ZodotenvConfig } from './types';
+import { zodotenv } from './zodotenv';
 
-describe('ZodEnv', () => {
+describe('zodotenv', () => {
   describe('Invalid configuration', () => {
     it('throws when the parameter is not an object', () => {
-      assert.throws(() => zodenv(1 as unknown as ZodEnvConfig), {
-        name: 'ZodEnvError',
+      assert.throws(() => zodotenv(1 as unknown as ZodotenvConfig), {
+        name: 'ZodotenvError',
         message: 'The configuration must be defined as an object',
       });
     });
@@ -16,13 +16,13 @@ describe('ZodEnv', () => {
     it('throws when environment name is not a non-empty string', () => {
       assert.throws(
         () =>
-          zodenv({
+          zodotenv({
             db: {
               host: ['', z.string()],
             },
           }),
         {
-          name: 'ZodEnvError',
+          name: 'ZodotenvError',
           message: 'Missing environment variable name for "db.host"',
         },
       );
@@ -31,11 +31,11 @@ describe('ZodEnv', () => {
     it('throws when zod schema is not provided', () => {
       assert.throws(
         () =>
-          zodenv({
+          zodotenv({
             name: ['HELLO', 123 as unknown as z.ZodType],
           }),
         {
-          name: 'ZodEnvError',
+          name: 'ZodotenvError',
           message: 'The provided schema is not a Zod type',
         },
       );
@@ -44,11 +44,11 @@ describe('ZodEnv', () => {
     it('throws when env variables fail the validation', () => {
       assert.throws(
         () =>
-          zodenv({
+          zodotenv({
             name: ['NAME', z.string()],
           }),
         {
-          name: 'ZodEnvError',
+          name: 'ZodotenvError',
           message: /^Configuration does not match the provided schema for "name"/,
         },
       );
@@ -70,7 +70,7 @@ describe('ZodEnv', () => {
       process.env.DB_TABLES = 'users,pages';
       process.env.ADMIN_CREDENTIALS = '{"name": "admin", "password": "12345"}';
 
-      const config = zodenv({
+      const config = zodotenv({
         name: ['NAME', z.string().default('my-app')],
         port: ['PORT', z.coerce.number()],
         http2: ['HTTP2', z.string().transform((s) => s === 'true')],

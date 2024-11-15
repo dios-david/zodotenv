@@ -1,5 +1,5 @@
 {
-  "name": "zodenv",
+  "name": "zodotenv",
   "description": "Validate and parse your environment variables like a responsible adult",
   "version": "1.0.0",
   "license": "MIT",
@@ -9,19 +9,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dios-david/zodenv.git"
+    "url": "git+https://github.com/dios-david/zodotenv.git"
   },
-  "main": "./dist/zodenv.cjs",
-  "module": "./dist/zodenv.mjs",
-  "types": "./dist/zodenv.d.cts",
+  "main": "./dist/zodotenv.cjs",
+  "module": "./dist/zodotenv.mjs",
+  "types": "./dist/zodotenv.d.cts",
   "exports": {
     "require": {
-      "types": "./dist/zodenv.d.cts",
-      "default": "./dist/zodenv.cjs"
+      "types": "./dist/zodotenv.d.cts",
+      "default": "./dist/zodotenv.cjs"
     },
     "import": {
-      "types": "./dist/zodenv.d.mts",
-      "default": "./dist/zodenv.mjs"
+      "types": "./dist/zodotenv.d.mts",
+      "default": "./dist/zodotenv.mjs"
     }
   },
   "scripts": {

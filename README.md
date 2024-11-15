@@ -1,5 +1,5 @@
 <div align="center">
-<h1>🔮 zodenv</h1>
+<h1>🔮 zodotenv</h1>
 
 Validate and parse your environment variables like a responsible adult
 </div>
@@ -7,9 +7,9 @@ Validate and parse your environment variables like a responsible adult
 ## Installation
 
 ```bash
-npm i -S zodenv
+npm i -S zodotenv
 
-pnpm add zodenv
+pnpm add zodotenv
 ```
 
 ## Usage
@@ -17,9 +17,9 @@ pnpm add zodenv
 ### Define your configuration
 ```ts
 import { z } from 'zod';
-import { zodenv } from 'zodenv';
+import { zodotenv } from 'zodotenv';
 
-const config = zodenv({
+const config = zodotenv({
   name: ['NAME', z.string().default('my-app')],
   port: ['PORT', z.coerce.number().default(3000)],
   http2: ['HTTP2', z.string().transform((s) => s === 'true')],
@@ -32,7 +32,7 @@ const config = zodenv({
 ```
 
 > [!CAUTION]
-> If the environment variable doesn’t match the Zod schema, zodenv will throw an error. Simple as that.
+> If the environment variable doesn’t match the Zod schema, zodotenv will throw an error. Simple as that.
 
 
 ### Grab your values with `config(...)`

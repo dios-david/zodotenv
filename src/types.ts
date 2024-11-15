@@ -2,8 +2,8 @@ import type { z } from 'zod';
 
 export type EnvWithZodType = [string, z.ZodType];
 
-export interface ZodEnvConfig {
-  [name: string]: ZodEnvConfig | EnvWithZodType;
+export interface ZodotenvConfig {
+  [name: string]: ZodotenvConfig | EnvWithZodType;
 }
 
 // -- To make object-path-like strings work to access nested configs
