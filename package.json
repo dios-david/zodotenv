@@ -1,7 +1,7 @@
 {
   "name": "zodenv",
   "description": "Validate and parse your environment variables like a responsible adult",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "license": "MIT",
   "author": {
     "name": "David Dios",
