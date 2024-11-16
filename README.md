@@ -6,10 +6,16 @@ Validate and parse your environment variables like a responsible adult
 
 ## Installation
 
+Use your favourite package manager to install zodotenv:
+
 ```bash
-npm i -S zodotenv
+npm i zodotenv
 
 pnpm add zodotenv
+
+bun add zodotenv
+
+deno add npm:zodotenv
 ```
 
 ## Usage

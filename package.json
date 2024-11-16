@@ -25,15 +25,9 @@
     }
   },
   "scripts": {
-    "----- BUILD ": "-----",
     "build": "pkgroll",
-    "dev": "pnpm run --filter backend --parallel --reporter-hide-prefix /^dev/",
-    "dev:types": "tsc --noEmit --watch --preserveWatchOutput",
-    "dev:app": "tsx watch --clear-screen=false src/index.ts",
-    "----- TEST ": "-----",
     "test": "NODE_ENV=test tsx --test src/**/*.spec.ts",
     "test:dev": "NODE_ENV=test tsx --watch --test src/**/*.spec.ts",
-    "----- LINT/FMT ": "-----",
     "lint": "biome check .",
     "lint:fix": "biome check . --write"
   },
