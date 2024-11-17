@@ -102,4 +102,98 @@ describe('zodotenv', () => {
       assert.deepEqual(config('adminCredentials'), { name: 'admin', password: '12345' });
     });
   });
+
+  describe('Serialization', () => {
+    const originalEnv = structuredClone(process.env);
+
+    afterEach(() => {
+      process.env = originalEnv;
+    });
+
+    it('serializes the entire configuration object to JSON', () => {
+      process.env.PORT = '3000';
+      process.env.HTTP2 = 'false';
+      process.env.DB_HOST = 'localhost:5432';
+      process.env.DB_DRIVER = 'mysql';
+      process.env.DB_TABLES = 'users,posts';
+      process.env.ADMIN_CREDENTIALS = '{"name": "admin", "password": "secret"}';
+
+      const config = zodotenv({
+        name: ['NAME', z.string().default('my-app')],
+        port: ['PORT', z.coerce.number()],
+        http2: ['HTTP2', z.string().transform((s) => s === 'true')],
+        database: {
+          host: ['DB_HOST', z.string()],
+          driver: ['DB_DRIVER', z.enum(['mysql', 'pgsql', 'sqlite'])],
+          tables: ['DB_TABLES', z.preprocess((s) => String(s).split(','), z.array(z.string()))],
+        },
+        adminCredentials: [
+          'ADMIN_CREDENTIALS',
+          z
+            .string()
+            .transform((s) => JSON.parse(s))
+            .pipe(
+              z.object({
+                name: z.string(),
+                password: z.string(),
+              }),
+            ),
+        ],
+      });
+
+      const expectedConfig = {
+        name: 'my-app',
+        port: 3000,
+        http2: false,
+        database: {
+          host: 'localhost:5432',
+          driver: 'mysql',
+          tables: ['users', 'posts'],
+        },
+        adminCredentials: {
+          name: 'admin',
+          password: 'secret',
+        },
+      };
+
+      assert.deepEqual(config.toJSON(), expectedConfig);
+    });
+
+    it('masks secret values when serializing to JSON', () => {
+      process.env.PORT = '3000';
+      process.env.API_KEY = 'secret-key';
+      process.env.ADMIN_CREDENTIALS = '{"name": "admin", "password": "secret"}';
+
+      const config = zodotenv({
+        name: ['NAME', z.string().default('my-app')],
+        port: ['PORT', z.coerce.number()],
+        apiKey: ['API_KEY', z.string(), { secret: true }],
+        adminCredentials: [
+          'ADMIN_CREDENTIALS',
+          z
+            .string()
+            .transform((s) => JSON.parse(s))
+            .pipe(
+              z.object({
+                name: z.string(),
+                password: z.string(),
+              }),
+            ),
+          { secret: true },
+        ],
+      });
+
+      const expectedConfig = {
+        name: 'my-app',
+        port: 3000,
+        apiKey: '*********',
+        adminCredentials: {
+          name: '*********',
+          password: '*********',
+        },
+      };
+
+      assert.deepEqual(config.toJSON(), expectedConfig);
+    });
+  });
 });

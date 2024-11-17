@@ -34,6 +34,10 @@ const config = zodotenv({
     driver: ['DB_DRIVER', z.enum(['mysql', 'pgsql', 'sqlite'])],
     tables: ['DB_TABLES', z.preprocess((s) => s.split(','), z.array(z.string()))],
   },
+  credentials: {
+    username: ['USERNAME', z.string()],
+    password: ['PASSWORD', z.string(), { secret: true }],
+  },
 });
 ```
 
@@ -55,6 +59,36 @@ config('database.tables'); // string[]
 
 config('something.which.does.not.exist');
 // ^^^ TypeScript will call you out on this one
+```
+
+### Serialize your configuration with `config.toJSON()`
+You can serialize your entire configuration object to JSON using `config.toJSON()`.
+This is useful for logging or debugging purposes.
+
+```ts
+console.log(JSON.stringify(config.toJSON(), null, 2));
+```
+
+> [!TIP]
+> Any configuration entries marked with `{ secret: true }` will have their values
+> masked when serializing to JSON, ensuring that sensitive information is not exposed.
+
+#### Example output
+```json
+{
+  "name": "my-app",
+  "port": 3000,
+  "http2": true,
+  "database": {
+    "host": "localhost",
+    "driver": "mysql",
+    "tables": ["users", "posts"]
+  },
+  "credentials": {
+    "username": "admin",
+    "password": "*********"
+  }
+}
 ```
 
 ## Tips

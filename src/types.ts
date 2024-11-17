@@ -1,6 +1,10 @@
 import type { z } from 'zod';
 
-export type EnvWithZodType = [string, z.ZodType];
+interface EnvOptions {
+  secret?: boolean;
+}
+
+export type EnvWithZodType = [string, z.ZodType, EnvOptions?];
 
 export interface ZodotenvConfig {
   [name: string]: ZodotenvConfig | EnvWithZodType;
