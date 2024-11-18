@@ -52,7 +52,6 @@ It returns the parsed and validated values including the inferred TypeScript typ
 You can even dive into nested values using an object-path-style string, with autocompletion and TypeScript validation to help you out.
 
 ```ts
-
 config('port'); // number
 config('database.driver'); // 'mysql' | 'pgsql' | 'sqlite'
 config('database.tables'); // string[]
@@ -61,37 +60,46 @@ config('something.which.does.not.exist');
 // ^^^ TypeScript will call you out on this one
 ```
 
-### Serialize your configuration
-You can serialize your entire configuration object to JSON. This is useful for
+### Serialise your configuration
+You can serialise your entire configuration object to JSON. This is useful for
 logging or debugging purposes.
 
 ```ts
 console.log(JSON.stringify(config, null, 2));
+
+// or
+
+console.log(config.toJSON());
 ```
 
 > [!TIP]
 > Any configuration entries marked with `{ secret: true }` will have their values
-> masked when serializing to JSON, ensuring that sensitive information is not exposed.
+> masked when serialising to JSON, ensuring that sensitive information is not exposed.
 
-#### Example output
-```json
-{
-  "name": "my-app",
-  "port": 3000,
-  "http2": true,
-  "database.host": "localhost",
-  "database.driver": "mysql",
-  "database.tables": ["users", "posts"],
-  "credentials.username": "admin",
-  "credentials.password": "*********"
-}
+#### Example
+```ts
+const config = zodotenv({
+  port: ['PORT', z.coerce.number().default(3000)],
+  database: {
+    host: ['DB_HOST', z.string()],
+    password: ['DB_PASSWORD', z.string(), { secret: true }],
+  },
+});
+
+console.log(JSON.stringify(config, null, 2));
+// Output:
+//  {
+//    "port": 3000,
+//    "database.host": "localhost:5432",
+//    "database.password": "*********"
+//  }
 ```
 
 ## Tips
 
 Check out [Zod schemas](https://zod.dev/) if you haven't already!
 
-Since all environment variables are strings, you can use Zod's `.coerce()` or `.transform()` methods to convert them to the type you need:
+Since all environment variables are strings, you might need to use `.coerce` / `.transform()` / `.preprocess()` to convert them to the type you need:
 
 ```ts
 // Boolean, e.g. `HTTP2=true`

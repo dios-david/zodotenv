@@ -104,14 +104,14 @@ describe('zodotenv', () => {
     });
   });
 
-  describe('Serialization', () => {
+  describe('Serialisation', () => {
     const originalEnv = structuredClone(process.env);
 
     afterEach(() => {
       process.env = originalEnv;
     });
 
-    it('serializes the entire configuration object to JSON', () => {
+    it('serialises the entire configuration object to JSON', () => {
       process.env.PORT = '3000';
       process.env.HTTP2 = 'false';
       process.env.DB_HOST = 'localhost:5432';
@@ -158,7 +158,7 @@ describe('zodotenv', () => {
       assert.deepEqual(JSON.parse(JSON.stringify(config)), expectedConfig);
     });
 
-    it('masks secret values when serializing to JSON', () => {
+    it('masks secret values when serialising to JSON', () => {
       process.env.PORT = '3000';
       process.env.API_KEY = 'secret-key';
       process.env.ADMIN_CREDENTIALS = '{"name": "admin", "password": "secret"}';

@@ -45,10 +45,6 @@ const walk = (map: Map<string, unknown>, entry: ZodotenvConfig | EnvWithZodType,
   }
 };
 
-const maskSecretValue = (value: unknown, secret?: boolean) => {
-  return secret ? '*********' : value;
-};
-
 export const zodotenv = <T extends ZodotenvConfig>(config: T) => {
   assert(
     typeof config === 'object',
@@ -65,8 +61,8 @@ export const zodotenv = <T extends ZodotenvConfig>(config: T) => {
   getConfig.toJSON = () => {
     const result = {};
 
-    for (const [key, { value, options }] of map.entries()) {
-      result[key] = maskSecretValue(value, options?.secret);
+    for (const [key, { value, options }] of map) {
+      result[key] = options?.secret ? '*********' : value;
     }
 
     return result;
