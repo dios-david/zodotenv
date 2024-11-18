@@ -1,6 +1,6 @@
 import type { z } from 'zod';
 
-interface EnvOptions {
+export interface EnvOptions {
   secret?: boolean;
 }
 

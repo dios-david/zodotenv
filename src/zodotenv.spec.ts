@@ -90,6 +90,7 @@ describe('zodotenv', () => {
                 password: z.string(),
               }),
             ),
+          { secret: true },
         ],
       });
 
@@ -145,18 +146,16 @@ describe('zodotenv', () => {
         name: 'my-app',
         port: 3000,
         http2: false,
-        database: {
-          host: 'localhost:5432',
-          driver: 'mysql',
-          tables: ['users', 'posts'],
-        },
+        'database.host': 'localhost:5432',
+        'database.driver': 'mysql',
+        'database.tables': ['users', 'posts'],
         adminCredentials: {
           name: 'admin',
           password: 'secret',
         },
       };
 
-      assert.deepEqual(config.toJSON(), expectedConfig);
+      assert.deepEqual(JSON.parse(JSON.stringify(config)), expectedConfig);
     });
 
     it('masks secret values when serializing to JSON', () => {
@@ -187,13 +186,10 @@ describe('zodotenv', () => {
         name: 'my-app',
         port: 3000,
         apiKey: '*********',
-        adminCredentials: {
-          name: '*********',
-          password: '*********',
-        },
+        adminCredentials: '*********',
       };
 
-      assert.deepEqual(config.toJSON(), expectedConfig);
+      assert.deepEqual(JSON.parse(JSON.stringify(config)), expectedConfig);
     });
   });
 });

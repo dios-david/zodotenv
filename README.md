@@ -61,12 +61,12 @@ config('something.which.does.not.exist');
 // ^^^ TypeScript will call you out on this one
 ```
 
-### Serialize your configuration with `config.toJSON()`
-You can serialize your entire configuration object to JSON using `config.toJSON()`.
-This is useful for logging or debugging purposes.
+### Serialize your configuration
+You can serialize your entire configuration object to JSON. This is useful for
+logging or debugging purposes.
 
 ```ts
-console.log(JSON.stringify(config.toJSON(), null, 2));
+console.log(JSON.stringify(config, null, 2));
 ```
 
 > [!TIP]
@@ -79,15 +79,11 @@ console.log(JSON.stringify(config.toJSON(), null, 2));
   "name": "my-app",
   "port": 3000,
   "http2": true,
-  "database": {
-    "host": "localhost",
-    "driver": "mysql",
-    "tables": ["users", "posts"]
-  },
-  "credentials": {
-    "username": "admin",
-    "password": "*********"
-  }
+  "database.host": "localhost",
+  "database.driver": "mysql",
+  "database.tables": ["users", "posts"],
+  "credentials.username": "admin",
+  "credentials.password": "*********"
 }
 ```
 

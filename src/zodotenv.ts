@@ -1,6 +1,7 @@
 import assert from 'node:assert';
 import { ZodType } from 'zod';
 import type {
+  EnvOptions,
   EnvWithZodType,
   ObjectPathName,
   ObjectPathType,
@@ -35,7 +36,7 @@ const walk = (map: Map<string, unknown>, entry: ZodotenvConfig | EnvWithZodType,
       );
     }
 
-    map.set(prefix, { value: data, secret: options?.secret });
+    map.set(prefix, { value: data, options });
   } else {
     for (const [name, value] of Object.entries(entry)) {
       const newPrefix = prefix ? `${prefix}.${name}` : name;
@@ -45,25 +46,7 @@ const walk = (map: Map<string, unknown>, entry: ZodotenvConfig | EnvWithZodType,
 };
 
 const maskSecretValue = (value: unknown, secret?: boolean) => {
-  if (!secret) {
-    return value;
-  }
-
-  if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-    return '*********';
-  }
-
-  if (typeof value === 'object' && value !== null) {
-    const maskedObj = Array.isArray(value) ? [] : {};
-    for (const key in value) {
-      if (Object.prototype.hasOwnProperty.call(value, key)) {
-        maskedObj[key] = maskSecretValue(value[key], true);
-      }
-    }
-    return maskedObj;
-  }
-
-  return value;
+  return secret ? '*********' : value;
 };
 
 export const zodotenv = <T extends ZodotenvConfig>(config: T) => {
@@ -72,7 +55,7 @@ export const zodotenv = <T extends ZodotenvConfig>(config: T) => {
     new ZodotenvError('The configuration must be defined as an object'),
   );
 
-  const map = new Map<string, { value: unknown; secret?: boolean }>();
+  const map = new Map<string, { value: unknown; options?: EnvOptions }>();
 
   walk(map, config);
 
@@ -82,21 +65,8 @@ export const zodotenv = <T extends ZodotenvConfig>(config: T) => {
   getConfig.toJSON = () => {
     const result = {};
 
-    for (const [key, { value, secret }] of map.entries()) {
-      const keys = key.split('.');
-      let current = result;
-
-      for (let i = 0; i < keys.length; i++) {
-        const k = keys[i];
-        if (i === keys.length - 1) {
-          current[k] = maskSecretValue(value, secret);
-        } else {
-          if (!(k in current)) {
-            current[k] = {};
-          }
-          current = current[k];
-        }
-      }
+    for (const [key, { value, options }] of map.entries()) {
+      result[key] = maskSecretValue(value, options?.secret);
     }
 
     return result;
