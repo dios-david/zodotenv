@@ -31,13 +31,13 @@ export type ObjectPathName<T, Prefix = '', Depth extends number = 5> = {
       : ObjectPathName<T[Key], `${string & Prefix}${string & Key}.`, Depths[Depth]>;
 }[keyof T];
 
-type zInfer<T> = T extends Zod3Type ? z3.infer<T> : z4.infer<T>;
+type ZInfer<T> = T extends Zod3Type ? z3.infer<T> : z4.infer<T>;
 
 export type ObjectPathType<
   T,
   PathParts extends [keyof T, ...string[]],
 > = T[PathParts[0]] extends EnvWithZodType
-  ? zInfer<T[PathParts[0]][1]>
+  ? ZInfer<T[PathParts[0]][1]>
   : ObjectPathType<
       T[PathParts[0]],
       PathParts extends [infer _First, ...infer Rest]
