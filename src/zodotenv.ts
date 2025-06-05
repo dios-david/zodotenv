@@ -1,11 +1,13 @@
 import assert from 'node:assert';
-import { ZodType } from 'zod';
+import { ZodType as Zod3Type } from 'zod';
+import { $ZodType as Zod4Type, safeParse } from 'zod/v4/core';
 import type {
   EnvOptions,
   EnvWithZodType,
   ObjectPathName,
   ObjectPathType,
   PathSplit,
+  ZodType,
   ZodotenvConfig,
 } from './types';
 
@@ -17,6 +19,9 @@ export class ZodotenvError extends Error {
   }
 }
 
+// https://zod.dev/library-authors?id=how-to-support-zod-3-and-zod-4-simultaneously
+const isZod4Schemma = (schema: ZodType): schema is Zod4Type => '_zod' in schema;
+
 const walk = (map: Map<string, unknown>, entry: ZodotenvConfig | EnvWithZodType, prefix = '') => {
   if (Array.isArray(entry)) {
     const [envName, schema, options] = entry;
@@ -25,9 +30,14 @@ const walk = (map: Map<string, unknown>, entry: ZodotenvConfig | EnvWithZodType,
       typeof envName === 'string' && envName.length > 0,
       new ZodotenvError(`Missing environment variable name for "${prefix}"`),
     );
-    assert(schema instanceof ZodType, new ZodotenvError('The provided schema is not a Zod type'));
+    assert(
+      schema instanceof Zod3Type || schema instanceof Zod4Type,
+      new ZodotenvError('The provided schema is not a Zod type'),
+    );
 
-    const { data, error } = schema.safeParse(process.env[envName]);
+    const { data, error } = isZod4Schemma(schema)
+      ? safeParse(schema, process.env[envName])
+      : schema.safeParse(process.env[envName]);
 
     if (error) {
       throw new ZodotenvError(

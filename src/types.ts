@@ -1,10 +1,13 @@
-import type { z } from 'zod';
+import type { ZodTypeAny as Zod3Type, infer as z3Infer } from 'zod/v3';
+import type { $ZodType as Zod4Type, infer as z4Infer } from 'zod/v4/core';
+
+export type ZodType = Zod3Type | Zod4Type;
 
 export interface EnvOptions {
   secret?: boolean;
 }
 
-export type EnvWithZodType = [string, z.ZodType, EnvOptions?];
+export type EnvWithZodType = [string, ZodType, EnvOptions?];
 
 export interface ZodotenvConfig {
   [name: string]: ZodotenvConfig | EnvWithZodType;
@@ -25,11 +28,13 @@ export type ObjectPathName<T, Prefix = '', Depth extends number = 5> = {
       : ObjectPathName<T[Key], `${string & Prefix}${string & Key}.`, Depths[Depth]>;
 }[keyof T];
 
+type zInfer<T> = T extends Zod3Type ? z3Infer<T> : z4Infer<T>;
+
 export type ObjectPathType<
   T,
   PathParts extends [keyof T, ...string[]],
 > = T[PathParts[0]] extends EnvWithZodType
-  ? z.infer<T[PathParts[0]][1]>
+  ? zInfer<T[PathParts[0]][1]>
   : ObjectPathType<
       T[PathParts[0]],
       PathParts extends [infer _First, ...infer Rest]

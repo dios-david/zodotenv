@@ -22,6 +22,7 @@ deno add npm:zodotenv
 
 ### Define your configuration
 ```ts
+// Zod 3, Zod 4 and Zod 4 Mini schemas are all supported
 import { z } from 'zod';
 import { zodotenv } from 'zodotenv';
 
@@ -41,8 +42,7 @@ const config = zodotenv({
 });
 ```
 
-> [!CAUTION]
-> If the environment variable doesn’t match the Zod schema, zodotenv will throw an error. Simple as that.
+⚠️ _If the environment variable doesn’t match the Zod schema, zodotenv will throw an error. Simple as that._
 
 
 ### Grab your values with `config(...)`
@@ -99,11 +99,14 @@ console.log(JSON.stringify(config, null, 2));
 
 Check out [Zod schemas](https://zod.dev/) if you haven't already!
 
-Since all environment variables are strings, you might need to use `.coerce` / `.transform()` / `.preprocess()` to convert them to the type you need:
+Since all environment variables are strings, you might need to use `.coerce` / `.transform()` / `.preprocess()` / `.stringbool()` to convert them to the type you need:
 
 ```ts
 // Boolean, e.g. `HTTP2=true`
 z.string().transform((s) => s === 'true')
+
+// Boolean from a "boolish" string when using Zod v4, e.g. `HTTP2=enabled`
+z.stringbool();
 
 // Number, e.g. `PORT=3000`
 z.coerce.number()
