@@ -31,6 +31,12 @@
   },
   "overrides": [
     {
+      "include": ["package.json"],
+      "formatter": {
+        "enabled": false
+      }
+    },
+    {
       "include": ["src/**/*.spec.ts"],
       "linter": {
         "rules": {
