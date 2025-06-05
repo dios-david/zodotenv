@@ -20,7 +20,7 @@ export class ZodotenvError extends Error {
 }
 
 // https://zod.dev/library-authors?id=how-to-support-zod-3-and-zod-4-simultaneously
-const isZod4Schemma = (schema: ZodType): schema is Zod4Type => '_zod' in schema;
+const isZod4Schema = (schema: ZodType): schema is Zod4Type => '_zod' in schema;
 
 const walk = (map: Map<string, unknown>, entry: ZodotenvConfig | EnvWithZodType, prefix = '') => {
   if (Array.isArray(entry)) {
@@ -35,7 +35,7 @@ const walk = (map: Map<string, unknown>, entry: ZodotenvConfig | EnvWithZodType,
       new ZodotenvError('The provided schema is not a Zod type'),
     );
 
-    const { data, error } = isZod4Schemma(schema)
+    const { data, error } = isZod4Schema(schema)
       ? safeParse(schema, process.env[envName])
       : schema.safeParse(process.env[envName]);
 

@@ -68,12 +68,6 @@ describe('zodotenv', () => {
   });
 
   describe('Accessors', () => {
-    const originalEnv = structuredClone(process.env);
-
-    afterEach(() => {
-      process.env = originalEnv;
-    });
-
     it('returns both root and nested configs', () => {
       process.env.PORT = '3000';
       process.env.HTTP2 = 'true';
