@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/dios-david/zodotenv/compare/v1.3.0...v1.3.1) (2025-06-05)
+
+
+### Bug Fixes
+
+* avoid `infer` in generated types ([#11](https://github.com/dios-david/zodotenv/issues/11)) ([158dd36](https://github.com/dios-david/zodotenv/commit/158dd362021e14419dedcd7224787c63edc41709))
+
 ## [1.3.0](https://github.com/dios-david/zodotenv/compare/v1.2.0...v1.3.0) (2025-06-05)
 
 
