@@ -3,6 +3,7 @@
   "description": "Validate and parse your environment variables like a responsible adult",
   "version": "1.3.0",
   "license": "MIT",
+  "keywords": ["zod", "env", "env var", "environment variables"],
   "author": {
     "name": "David Dios",
     "email": "dios.david@thedevcore.net"
