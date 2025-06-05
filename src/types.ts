@@ -1,5 +1,8 @@
-import type { ZodTypeAny as Zod3Type, infer as z3Infer } from 'zod/v3';
-import type { $ZodType as Zod4Type, infer as z4Infer } from 'zod/v4/core';
+import type * as z3 from 'zod/v3';
+import type * as z4 from 'zod/v4/core';
+
+type Zod3Type = z3.ZodTypeAny;
+type Zod4Type = z4.$ZodType;
 
 export type ZodType = Zod3Type | Zod4Type;
 
@@ -28,7 +31,7 @@ export type ObjectPathName<T, Prefix = '', Depth extends number = 5> = {
       : ObjectPathName<T[Key], `${string & Prefix}${string & Key}.`, Depths[Depth]>;
 }[keyof T];
 
-type zInfer<T> = T extends Zod3Type ? z3Infer<T> : z4Infer<T>;
+type zInfer<T> = T extends Zod3Type ? z3.infer<T> : z4.infer<T>;
 
 export type ObjectPathType<
   T,
