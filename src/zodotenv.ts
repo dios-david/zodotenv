@@ -1,5 +1,5 @@
 import assert from 'node:assert';
-import { ZodType as Zod3Type } from 'zod';
+import { ZodType as Zod3Type } from 'zod/v3';
 import { $ZodType as Zod4Type, safeParse } from 'zod/v4/core';
 import type {
   EnvOptions,

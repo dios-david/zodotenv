@@ -18,6 +18,8 @@ bun add zodotenv
 deno add npm:zodotenv
 ```
 
+Zod is a required peer dependency. Zod 4 and Zod 3.25+ are both supported.
+
 ## Usage
 
 ### Define your configuration
