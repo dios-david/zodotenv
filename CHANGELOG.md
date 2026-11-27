@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.0](https://github.com/dios-david/zodotenv/compare/v1.3.1...v1.4.0) (2026-11-27)
+
+
+### Features
+
+* support Zod 4 as a peer dependency ([706fa87](https://github.com/dios-david/zodotenv/commit/706fa8792f193176c630ee1dce923a7aacede7f5))
+
+
+### Bug Fixes
+
+* support Zod 3 schemas with Zod 4 installed ([#15](https://github.com/dios-david/zodotenv/issues/15)) ([d72ed37](https://github.com/dios-david/zodotenv/commit/d72ed37c3a68325aec48706decd3628a24da2904))
+
 ## [1.3.1](https://github.com/dios-david/zodotenv/compare/v1.3.0...v1.3.1) (2025-06-05)
 
 
