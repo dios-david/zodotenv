@@ -8,6 +8,9 @@ on:
 jobs:
   pr-checks:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        zod: ['3', '4']
 
     steps:
       - uses: actions/checkout@v4
@@ -16,6 +19,7 @@ jobs:
           node-version: 22
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
+      - run: npm install --no-save zod@${{ matrix.zod }}
       - run: npm run lint
       - run: npm run test
       - run: npm run build

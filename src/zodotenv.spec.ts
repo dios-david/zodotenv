@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { afterEach, beforeEach, describe, it } from 'node:test';
-import z from 'zod';
+import { z as rootZod } from 'zod';
+import { z } from 'zod/v3';
 import { z as z4 } from 'zod/v4';
 import { z as z4m } from 'zod/v4-mini';
 import type { ZodotenvConfig } from './types';
@@ -194,6 +195,12 @@ describe('zodotenv', () => {
   });
 
   describe('Zod 4 compatibility', () => {
+    it('accepts schemas from the root Zod entry point', () => {
+      process.env.PORT = '3000';
+      const config = zodotenv({ port: ['PORT', rootZod.coerce.number()] });
+      assert.equal(config('port'), 3000);
+    });
+
     it('works with Zod 4 schemas', () => {
       process.env.NAME = 'my-app';
       process.env.PORT = '3000';
